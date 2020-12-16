@@ -1,10 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\DatingApp-SPA",
-    "\\DatingApp-SPA\\src",
-    "\\DatingAPP.API"
+    "\\DatingAPP.API",
+    "\\DatingAPP.API\\Controllers",
+    "\\DatingAPP.API\\Data",
+    "\\DatingAPP.API\\Model"
   ],
-  "SelectedNode": "\\DatingApp-SPA\\src\\index.html",
+  "SelectedNode": "\\DatingAPP.API\\Controllers\\WeatherForecastController.cs",
   "PreviewInSolutionExplorer": false
 }

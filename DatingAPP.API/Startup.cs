@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using DatingAPP.API.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -45,12 +46,15 @@ namespace DatingApp.API
              Configuration omogucaca nam da pozovemo metodu iz appsettings.json
             GetConnectionString("DefaultConnection")) naziv metode koja se koristi
              */
+           services.AddScoped<IAutnRepository,AutnRepository>();// pravi instancu klasce AR za svaki http zahtev
+           // KONJINO  PAZI KAKO SI DAO NAZIVE KLASAMA!!!!!!!!!!!!
             services.AddCors();
             services.AddControllers();// omogucava koriscenje kontrolera Conrtoler Reset arhitektura
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DatingApp.API", Version = "v1" });
             });
+         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,6 +81,8 @@ namespace DatingApp.API
             {
                 endpoints.MapControllers();
             });
+         
+           
         }
     }
 }
