@@ -1,9 +1,9 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-primary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Dating App</a>
     
     
-      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+      <ul *ngIf="loggedIN()" class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item active">
           <a class="nav-link"  href="#">Matches</a>
         </li>
@@ -13,19 +13,18 @@
         <li class="nav-item">
           <a class="nav-link " href="#">Messages</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link " href="#" (click)="logout()">Logout</a>
-        </li>
+        
       </ul>
 
-      <div *ngIf="loggedIN()" a-ngf class="dropdown">
-        <a class="dropdown-toggle text-light">
-          Welcome User
+      <div *ngIf="loggedIN()" a-ngf class="dropdown" dropdown>
+        <a class="dropdown-toggle text-light"  dropdownToggle>
+          Welcome {{authService.decodeToken.unique_name}}
+
         </a>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu mt-3" *dropdownMenu>
           <li><a class="dropdown-item" href="#"><i class="fa fa-user"></i>Edit Profile</a></li>
           <div class="dropdowm-divider"></div>
-          <li><a class="dropdown-item" href="#"><i class="fa fa-sign-out"></i>Logout</a></li>
+          <li><a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i>Logout</a></li>
         </ul>
       </div>
 
