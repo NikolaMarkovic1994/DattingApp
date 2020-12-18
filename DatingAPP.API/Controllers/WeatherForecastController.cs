@@ -111,6 +111,7 @@ namespace DatingApp.API.Controllers
         [HttpPost("log")]
         public async Task<IActionResult> LogIn([FromBody] UserForLogInDtos userForLogInDtos)
         {
+            //throw new Exception("Kurcina");
             var userFromDb = await _repo.LogIn(userForLogInDtos.Usernam.ToLower(), userForLogInDtos.Password);
             // promenljivoj userFromDb popenjuje korisnika iz baze ako je sve uredu
 
