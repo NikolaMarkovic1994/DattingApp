@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DatingApp.API.Data;
 using DatingAPP.API.Data;
 using DatingAPP.API.Extensions;
@@ -40,6 +41,7 @@ namespace DatingApp.API
         // dependenci injektions
         public void ConfigureServices(IServiceCollection services)// metoda koja slucsi za dependcise
         {
+            services.AddTransient<Seed>();
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             // povezivanje programa sa bazom koju koristimo
 
@@ -54,7 +56,7 @@ namespace DatingApp.API
             GetConnectionString("DefaultConnection")) naziv metode koja se koristi
              */
            services.AddScoped<IAutnRepository,AutnRepository>();// pravi instancu klasce AR za svaki http zahtev
-          
+          services.AddScoped<IDatingRepository,DatingRepository>();
            // KONJINO  PAZI KAKO SI DAO NAZIVE KLASAMA!!!!!!!!!!!!
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
                 options.TokenValidationParameters = new TokenValidationParameters 
@@ -68,7 +70,10 @@ namespace DatingApp.API
                 };
             });
             services.AddCors();
-            services.AddControllers();// omogucava koriscenje kontrolera Conrtoler Reset arhitektura
+            services.AddAutoMapper();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );;// omogucava koriscenje kontrolera Conrtoler Reset arhitektura
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DatingApp.API", Version = "v1" });
@@ -77,7 +82,7 @@ namespace DatingApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seed seder)
         {
             if (env.IsDevelopment())
             {
@@ -99,12 +104,12 @@ namespace DatingApp.API
 
             //app.UseHttpsRedirection();
 
-
+        //    seder.SeedUsers();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseRouting();
 
-            //app.UseAuthorization();
+           // app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

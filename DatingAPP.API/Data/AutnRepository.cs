@@ -15,8 +15,10 @@ namespace DatingAPP.API.Data
             _context = context;
 
         }
+        
         public async Task<User> LogIn(string username, string password)
         {
+            
             // Ansihron metoda vazno
             var user =await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);// ide u bazu i trazi korisnika sa istim korisnickim imenom
             if(username==null)

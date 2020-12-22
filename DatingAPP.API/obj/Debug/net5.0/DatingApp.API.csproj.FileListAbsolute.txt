@@ -80,3 +80,10 @@ C:\Users\38164\Desktop\Test\DatingApp\DatingAPP.API\bin\Debug\net5.0\runtimes\wi
 C:\Users\38164\Desktop\Test\DatingApp\DatingAPP.API\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
 C:\Users\38164\Desktop\Test\DatingApp\DatingAPP.API\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\38164\Desktop\Test\DatingApp\DatingAPP.API\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\Data\UserSeedData.json
+C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
+C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\AutoMapper.dll
+C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
