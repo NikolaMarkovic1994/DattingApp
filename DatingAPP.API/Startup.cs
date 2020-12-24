@@ -104,12 +104,12 @@ namespace DatingApp.API
 
             //app.UseHttpsRedirection();
 
-        //    seder.SeedUsers();
+        //    seder.SeedUsers(); ubacivanje korisnika u bazu
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseRouting();
 
-           // app.UseAuthorization();
+           app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
