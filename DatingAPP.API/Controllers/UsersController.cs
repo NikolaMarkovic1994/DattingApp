@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using DatingAPP.API.Data;
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DatingAPP.API.Controllers
 {
-    //[Authorize]
+    // [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UsersController : ControllerBase
@@ -42,6 +44,30 @@ namespace DatingAPP.API.Controllers
 
             return Ok(usersToReturn);
 
+        }
+        [HttpPut("{id}/{userName}")]
+        public async Task<IActionResult> UpadateUser(int id,string userName, UserForUpadateDto userForUpadateDto)
+         {
+        //     if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+        //     {
+        //         return Unauthorized(); MORAMO POGELDATI 
+        
+        //    }
+             
+
+            var userFromRepo = await _repo.GetUser(id);
+            var userNameFromRepo = await _repo.GetUserName(userName);
+            
+            if(userFromRepo.Id != userNameFromRepo.Id)
+            {return Unauthorized();}
+
+            _mapper.Map(userForUpadateDto, userFromRepo);
+            if (await _repo.SaveAll())
+            {
+                return NoContent();
+            }
+            throw new Exception($"Updating {id} faled on save");
+        
         }
 
         // [HttpGet("{id}")]

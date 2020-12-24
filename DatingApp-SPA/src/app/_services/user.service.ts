@@ -20,5 +20,8 @@ getUsers(): Observable<User[]> {
 getUser(id): Observable<User> {
   return this.http.get<User>(this.baseUrl + id);
 }
+upadteUser(id: number, userName: string, user: User) {
+  return this.http.put(this.baseUrl + id + '/' + userName, user);
+}
 
 }

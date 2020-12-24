@@ -12,7 +12,7 @@ export class ValuesComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.getValues();
+   // this.getValues();
   }
   getValues() {
     this.http.get('http://localhost:5000/WeatherForecast').subscribe(Response => {
