@@ -21,5 +21,6 @@ namespace DatingAPP.API.Model
         public DateTime Created { get; set; }
         public DateTime LastActive { get; set; }
         public ICollection<Photo> Photos  { get; set; }
+        // User je povezan sa tabelom photos
     }
 }

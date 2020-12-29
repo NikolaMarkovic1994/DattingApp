@@ -9,6 +9,10 @@ namespace DatingAPP.API.Model
         public  string Description { get; set; }
         public DateTime DateAdded { get; set; }
         public bool IsMain { get; set; }
+        public string PublicId { get; set; }
+
+
+        // Postavnjamo opcije kako bi pri brisanju korisnika obisali i njegove fotografije
         public User User { get; set; }
         public int UserId { get; set; }
     }

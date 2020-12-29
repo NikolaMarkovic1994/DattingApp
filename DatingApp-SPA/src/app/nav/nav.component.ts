@@ -11,10 +11,11 @@ import { AuthService } from '../_services/auth.service';
 })
 export class NavComponent implements OnInit {
   model: any = {}; // promenjiva model tipa any koja ce u sebi imati Username and Pass
-
+  photoUrl: string;
   constructor(public authService: AuthService, private alertify: AlertifyService, private router: Router) { }
 
   ngOnInit() {
+    this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
 
   login() {
@@ -35,6 +36,9 @@ export class NavComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.authService.decodeToken = null;
+    this.authService.curentUser = null;
     this.alertify.message('LOGGED OUT');
     this.router.navigate(['/home']);
 }

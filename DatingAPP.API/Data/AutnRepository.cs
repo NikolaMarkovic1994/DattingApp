@@ -20,7 +20,7 @@ namespace DatingAPP.API.Data
         {
             
             // Ansihron metoda vazno
-            var user =await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);// ide u bazu i trazi korisnika sa istim korisnickim imenom
+            var user =await _context.Users.Include(p =>p.Photos).FirstOrDefaultAsync(x => x.UserName == username);// ide u bazu i trazi korisnika sa istim korisnickim imenom
             if(username==null)
                  return null;
             if(!VerPassHash(password, user.PasswordHash,user.PasswordSalt))

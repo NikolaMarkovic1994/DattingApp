@@ -42,6 +42,7 @@ namespace DatingApp.API
         public void ConfigureServices(IServiceCollection services)// metoda koja slucsi za dependcise
         {
             services.AddTransient<Seed>();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             // povezivanje programa sa bazom koju koristimo
 
@@ -73,7 +74,11 @@ namespace DatingApp.API
             services.AddAutoMapper();
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                );;// omogucava koriscenje kontrolera Conrtoler Reset arhitektura
+                );;/* posto su klase photo i user povezane (postije parametri u obe metode koje su tipa user ili photo)
+                  pri http requestu server se odgovoriti kao petlju tj poslace prvog usera i unautar njega njegove fotogracije,
+                  a posto unutar klase Photo postoji klas User unutar odgovora za korisnikove fpotogracije pobovo ce poslati
+                  podatke o korisniu itd pvim opcijamo zaustavljamo to
+                */
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DatingApp.API", Version = "v1" });
@@ -102,13 +107,13 @@ namespace DatingApp.API
                 }));
             }
 
-            //app.UseHttpsRedirection();
+           // app.UseHttpsRedirection();
 
         //    seder.SeedUsers(); ubacivanje korisnika u bazu
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseRouting();
-
+            app.UseAuthentication();
            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

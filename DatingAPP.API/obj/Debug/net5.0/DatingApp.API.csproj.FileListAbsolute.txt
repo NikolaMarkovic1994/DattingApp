@@ -87,3 +87,4 @@ C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\Microsoft.A
 C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll
 C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\AutoMapper.dll
 C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\38164\Desktop\Test\DatingApp\DatingApp.API\bin\Debug\net5.0\CloudinaryDotNet.dll

@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-sm-4">
       <div class="card">
-        <img class="card-img-top img-thumbnail" src="{{user.photoUrl}}" alt="{{user.userName}}">
+        <img class="card-img-top img-thumbnail" src="{{photoUrl}}" alt="{{user.userName}}">
       </div>
       <div class="card-body">
         <strong>Losation:</strong>
@@ -61,7 +61,8 @@
           </form>
           </tab>
           <tab heading="Edit Photos">
-            <p>Eddit will go hearr</p>
+            <app-photo-editor [photos]="user.photos" 
+            (getMemberPhotoChange)="updateMainP($event)"></app-photo-editor>
           </tab>
           
         </tabset>
