@@ -5,13 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ValuesComponent } from './values/values.component';
 import { NavComponent } from './nav/nav.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './_services/auth.service';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { AlertifyService } from './_services/alertify.service';
-import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 import { MessagesComponent } from './messages/messages.component';
 import { MemberListComponent } from './members/member-list/member-list.component';
 import { ListComponent } from './list/list.component';
@@ -57,11 +57,13 @@ export function tokenGetter() {
     BrowserModule,
     HttpClientModule, // da bi smo mogli da koristimo dodatneopcije
     FormsModule,
+    ReactiveFormsModule,
     BsDropdownModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     TabsModule.forRoot(),
     NgxGalleryModule,
-    FileUploadModule
+    FileUploadModule,
+    BsDatepickerModule.forRoot()
    /* JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

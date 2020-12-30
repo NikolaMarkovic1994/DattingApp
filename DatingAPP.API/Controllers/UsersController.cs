@@ -35,7 +35,7 @@ namespace DatingAPP.API.Controllers
 
 
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id}" ,  Name = "GetUser")]
         public async Task<IActionResult> GetUsers1(int id)
         {
 

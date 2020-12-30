@@ -1,18 +1,101 @@
-<form #registerForm="ngForm" (ngSubmit)='registar()'>
+<form [formGroup]="regForm" (ngSubmit)='registar()'>
   <h2 class="text-center text-primary">Sign Up</h2>
   <hr>
-
   <div class="form-group">
-    <input type="text" class="form-control" required name="username" [(ngModel)]="model.username"  placeholder="Username">
+    <label class="control-label" style="margin-right:10px">I am a: </label>
+    <label class="radio-inline">
+      <input class="mr-3" type="radio" value="male" formControlName="gender">Male
+    </label>
+    <label class="radio-inline ml-3">
+      <input class="mr-3" type="radio" value="female" formControlName="gender">Female
+    </label>
   </div>
 
   <div class="form-group">
-    <input type="password" class="form-control" required name="pssword"  [(ngModel)]="model.pssword" placeholder="Password">
+    <input type="text"
+    [ngClass]="{'is-invalid': regForm.get('username').errors
+    && regForm.get('username').touched}"
+    class="form-control"  
+    formControlName="username" 
+     placeholder="Username">
+     <div class="invalid-feedback">Morate popuniti korisnicko ime</div>
+  </div >
+
+  <div class="form-group">
+    <input [ngClass]="{'is-invalid': regForm.get('dateOfBirth').errors && regForm.get('dateOfBirth').touched}" class="form-control"
+      placeholder="Date of Birth" formControlName="dateOfBirth" type="text" bsDatepicker >
+    <div class="invalid-feedback" *ngIf="regForm.get('dateOfBirth').touched && regForm.get('dateOfBirth').hasError('required')">Date of Birth is required</div>
+  </div>
+
+  <div class="form-group">
+    <input [ngClass]="{'is-invalid': regForm.get('city').errors && regForm.get('city').touched}" class="form-control"
+      placeholder="City" formControlName="city">
+    <div class="invalid-feedback" *ngIf="regForm.get('city').touched && regForm.get('city').hasError('required')">City is required</div>
+  </div>
+
+  <div class="form-group">
+    <input [ngClass]="{'is-invalid': regForm.get('country').errors && regForm.get('country').touched}" class="form-control"
+      placeholder="Country" formControlName="country">
+    <div class="invalid-feedback" *ngIf="regForm.get('country').touched && regForm.get('country').hasError('required')">Country is required</div>
+  </div>
+
+  <div class="form-group">
+    <input type="password"
+    [ngClass]="{'is-invalid': regForm.get('pssword').errors
+    && regForm.get('pssword').touched}"
+     class="form-control"  
+     formControlName="pssword" 
+      placeholder="Password">
+
+    <div class="invalid-feedback" 
+      *ngIf="regForm.get('pssword').hasError('required')
+      && regForm.get('pssword').touched">
+      Morate popuniti password
+    </div>
+
+    <div class="invalid-feedback" 
+    *ngIf="regForm.get('pssword').hasError('minlength')
+    && regForm.get('pssword').touched">
+    Lozinka mora biti najmanje 4 karaktera
+  </div>
+
+  <div class="invalid-feedback" 
+  *ngIf="regForm.get('pssword').hasError('maxlength')
+  && regForm.get('pssword').touched">
+  Lozinka mora biti najvise 8 karaktera
+</div>
+
+  </div>
+
+  <div class="form-group">
+    <input type="password"
+    [ngClass]="{'is-invalid': regForm.get('confirmPssword').errors
+    && regForm.get('confirmPssword').touched || regForm.get('confirmPssword').touched && regForm.hasError('mismatch')}"
+         class="form-control" 
+      formControlName="confirmPssword" 
+       placeholder="Confirm Password">
+       
+       <div class="invalid-feedback" 
+       *ngIf="regForm.get('confirmPssword').hasError('required')
+       && regForm.get('confirmPssword').touched">
+       Morate popuniti password
+      </div>
+
+      <div class="invalid-feedback" 
+      *ngIf="regForm.hasError('mismatch')
+      && regForm.get('confirmPssword').touched">
+      Lozinke se poraju da se podudaraju
+     </div>
+
   </div>
 
   <div class="form-group text-center text-black">
-    <button class="btn btn-success mr-2" type="submit">Register</button>
+    <button class="btn btn-success mr-2" [disabled]= "!regForm.valid" type="submit">Register</button>
     <button class="btn btn-default" style="background-color:red "  type="button" (click)='cansel()'>Cancel</button>
   </div>
   
 </form>
+
+
+<p>Form value: {{regForm.value | json}}</p>
+<p>Form status: {{regForm.status | json}}</p>
