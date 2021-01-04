@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using DatingAPP.API.Extensions;
 using DatingAPP.API.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,10 +47,34 @@ namespace DatingAPP.API.Data
             // .Include da vrati i slike korisnika iz tavele Photos
             return user;        }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-          var user =  await _context.Users.Include(p => p.Photos).ToListAsync();
-          return user;
+          var user =   _context.Users.Include(p => p.Photos).OrderByDescending(u =>u.DateOfBirth).AsQueryable();
+          user = user.Where(u=> u.Id !=userParams.UserId);
+          user = user.Where(u=> u.Gender ==userParams.Gender);
+
+          if (userParams.MinAge != 18 || userParams.MaxAge != 90)
+          {
+              var minDob  = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+              var maxDob = DateTime.Today.AddYears(-userParams.MinAge );  
+              user =  user.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth<= maxDob);         
+          }
+
+          if (!string.IsNullOrEmpty(userParams.OrderBy))
+          {
+              switch (userParams.OrderBy)
+              {
+                  case "created":
+                    user = user.OrderByDescending(u => u.Created);
+                    break;
+                 default:
+                   user = user.OrderByDescending(u => u.DateOfBirth);
+                   break;
+
+              }
+          }
+
+          return await PagedList<User>.CreateAsync(user, userParams.PageNumber,userParams.pageSize);
 
         }
 
