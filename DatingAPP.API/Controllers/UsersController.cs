@@ -6,6 +6,7 @@ using AutoMapper;
 using DatingAPP.API.Data;
 using DatingAPP.API.Dtos;
 using DatingAPP.API.Extensions;
+using DatingAPP.API.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -79,6 +80,38 @@ namespace DatingAPP.API.Controllers
             }
             throw new Exception($"Updating {id} faled on save");
         
+        }
+
+        [HttpPost("{id}/like/{recipientId}")]
+        public async Task<IActionResult> LikeUser(int id, int recipientId ){
+
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+             {
+                  return Unauthorized(); 
+        
+             }
+             var like = await _repo.GetLike(id,recipientId);
+
+             if (like != null)
+             {
+                 return BadRequest("Vec ste Like usera");
+             }
+
+             if (await _repo.GetUser(recipientId)==null)
+             {
+                 return NotFound();
+             }
+            like = new Like{
+                LikerId = id,
+                LekeeId = recipientId
+            };
+
+            _repo.Add<Like>(like);
+            if (await _repo.SaveAll())
+            {
+                return Ok();
+            }
+            return BadRequest("Doslo je do greske pri lajkovanju");
         }
 
         // [HttpGet("{id}")]
