@@ -11,7 +11,12 @@ import { ListsResolver } from './_resolvers/lists.resolver';
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberEditResolver } from './_resolvers/member-edit.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
+import { MessagesResolver } from './_resolvers/messages.resolver';
+/*
 
+Put kooji aplikacija treba da ide kada kliknemo neki od dole navedenih opcija
+
+*/
 export const appRoutes: Routes = [
     {path: '', component: HomeComponent},
     {path: '',
@@ -22,7 +27,8 @@ export const appRoutes: Routes = [
     {path: 'members/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver}},
     {path: 'member/edit', component: MemberEditComponent ,
     resolve: {user: MemberEditResolver}, canDeactivate: [PreventUsavedChangesGuard]},
-    {path: 'messages', component: MessagesComponent},
+    {path: 'messages', component: MessagesComponent, resolve: {messages: MessagesResolver}},
+    // resolve koji se resolver poyiva pri kada se klikne na message na stranici
     {path: 'list', component: ListComponent, resolve: { users: ListsResolver} },
  ]
     },

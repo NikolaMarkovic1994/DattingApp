@@ -3,14 +3,16 @@ using System;
 using DatingApp.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210106094457_AddMessageTabel")]
+    partial class AddMessageTabel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,10 +54,7 @@ namespace DatingApp.API.Migrations
                     b.Property<bool>("RecepientDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("RecepientId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RecipientId")
+                    b.Property<int>("RecepientId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("SenderDeleted")
@@ -189,7 +188,8 @@ namespace DatingApp.API.Migrations
                     b.HasOne("DatingAPP.API.Model.User", "Recepient")
                         .WithMany("MessagesReceived")
                         .HasForeignKey("RecepientId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("DatingAPP.API.Model.User", "Sender")
                         .WithMany("MessagesSend")

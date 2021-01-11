@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Messages } from '../_model/messages';
 import { PaginationResult } from '../_model/pagination';
 import { User } from '../_model/user';
 
@@ -68,4 +69,48 @@ sendLike(id: number , recipientId: number) {
   // http post mora da posanje nesto u telo alo je mosze moslati prazno {}
 
 }
+
+getMessages(id: number, page?, itemsPerPage?, messageContainer?) {
+  const paginateResult: PaginationResult<Messages[]> = new PaginationResult<Messages[]>();
+  let params = new HttpParams();
+
+  params = params.append('MessageContainer', messageContainer);
+  if (page != null && itemsPerPage != null) {
+    params = params.append('pageNumber', page);
+    params = params.append('pageSize', itemsPerPage);
+
+  }
+  return this.http.get<Messages[]>(this.baseUrl +  id + '/messages' , {observe : 'response', params})
+  .pipe(
+    map(response => {
+      paginateResult.result = response.body;
+      if (response.headers.get('Pagination') != null) {
+        paginateResult.pagination = JSON.parse(response.headers.get('Pagination'));
+
+      }
+      return paginateResult;
+    })
+  );
+
+  // da bi dobili paginate motamo koristiti get + <> naglasiti koji tip pofataka uyimamo iy mazae
+  // yato pravimo interfejs koji ima iste parametre kao i klasa sa istim imenom u Models folderu u APi-u
+
+}
+getMessagesThread(id: number, recipientId: number ) {
+ return this.http.get<Messages[]>(this.baseUrl +  id + '/messages/tread/' + recipientId );
+}
+
+sendMessage(id: number , message: Messages) {
+  return this.http.post(this.baseUrl +  id + '/messages', message);
+}
+deleteMessage(id: number, userId: number) {
+  return this.http.post(this.baseUrl +  userId + '/messages/' + id, {});
+  // { } za post metodu gde se saljen neki objekat
+ }
+ markAsRead(userId: number, messageId: number) {
+  return this.http.post(this.baseUrl +  userId + '/messages/' + messageId + '/read', {})
+  .subscribe();
+
+ }
+
 }
