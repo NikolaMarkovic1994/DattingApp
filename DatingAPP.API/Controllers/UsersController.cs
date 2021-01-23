@@ -32,7 +32,7 @@ namespace DatingAPP.API.Controllers
         public async Task<IActionResult> GetUsers([FromQuery ]UserParams userParams)
         {
             var curentUserId= int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var userFromReop = await _repo.GetUser(curentUserId);
+            var userFromReop = await _repo.GetUser(curentUserId,true);
             userParams.UserId = curentUserId;
             if (string.IsNullOrEmpty(userParams.Gender))
             {
@@ -48,10 +48,10 @@ namespace DatingAPP.API.Controllers
         [HttpGet("{id}" ,  Name = "GetUser")]
         public async Task<IActionResult> GetUsers1(int id)
         {
-
+            var isCurrentUser = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)==id;
             // var users = await _repo.GetUsers(); 
             // return Ok(users);
-            var user = await _repo.GetUser(id);
+            var user = await _repo.GetUser(id,isCurrentUser);
             var usersToReturn= _mapper.Map<UserForDetaileDto>(user);
 
             return Ok(usersToReturn);
@@ -65,9 +65,9 @@ namespace DatingAPP.API.Controllers
         //         return Unauthorized(); MORAMO POGELDATI 
         
         //    }
-             
+            
 
-            var userFromRepo = await _repo.GetUser(id);
+            var userFromRepo = await _repo.GetUser(id,true);
             var userNameFromRepo = await _repo.GetUserName(userName);
             
             if(userFromRepo.Id != userNameFromRepo.Id)
@@ -97,7 +97,7 @@ namespace DatingAPP.API.Controllers
                  return BadRequest("Vec ste Like usera");
              }
 
-             if (await _repo.GetUser(recipientId)==null)
+             if (await _repo.GetUser(recipientId,false)==null)
              {
                  return NotFound();
              }

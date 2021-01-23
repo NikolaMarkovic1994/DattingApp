@@ -8,7 +8,11 @@
     </ul>
   </div>
   <div class="card-body p">
-    <h6 class="card-title text-centar mb-1"><i class="fa fa-user"></i>
+    <h6 class="card-title text-centar mb-1">
+      <span [class.is-online]= "(presence.onlineUsers$ | async).includes(user.userName)">
+        <i class="fa fa-user"></i>
+      </span>
+      
       {{user.userName}},{{user.age}}
     </h6>
     <p class="card-text text-muded text-centar">{{user.city}}</p>

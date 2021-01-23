@@ -1,11 +1,14 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Messages } from '../_model/messages';
 import { PaginationResult } from '../_model/pagination';
 import { User } from '../_model/user';
+import { BehaviorSubject } from 'rxjs';
+import { Group } from '../_model/group';
 
 
 @Injectable({
@@ -13,9 +16,79 @@ import { User } from '../_model/user';
 })
 export class UserService {
    baseUrl = environment.apiUrl + 'users/';
+   hubUrl = environment.hubUrl;
+   private hubConnectinon: HubConnection;
+   private messageThreadSource = new BehaviorSubject<Messages[]>([]);
+
+    messageThread$ = this.messageThreadSource.asObservable();
+
+
 
 
 constructor(private http: HttpClient) { }
+
+
+
+
+
+createHubConnection( otherUserName: number) {
+  this.hubConnectinon = new  HubConnectionBuilder()
+  .withUrl(this.hubUrl + 'messages?user=' + otherUserName + '', {
+    accessTokenFactory: () => localStorage.getItem('token')
+  })
+  .withAutomaticReconnect()
+  .build();
+
+  this.hubConnectinon.start()
+  .catch(error => console.log(error));
+
+
+  this.hubConnectinon.on('ReciveMessageThread', messages => {
+     this.messageThreadSource.next(messages);
+
+  });
+
+  this.hubConnectinon.on('NewMessage', message => {
+    this.messageThread$.pipe(take(1)).subscribe(messages => {
+      this.messageThreadSource.next([...messages, message]);
+    });
+  });
+  this.hubConnectinon.on('UpdatedGroup', (group: Group) => {
+    if (group.connections.some(x => x.username === 'sonja')) {
+      this.messageThread$.pipe(take(1)).subscribe(messages => {
+        messages.forEach(message => {
+          if (!message.dateRead) {
+            message.dateRead = new Date(Date.now());
+          }
+        });
+        this.messageThreadSource.next([...messages]);
+      });
+    }
+  });
+
+
+}
+
+async testMessageGest() {
+  return this.hubConnectinon.invoke('GetMessages')
+  .catch(error => console.log(error));
+}
+
+stopHubConnection() {
+  this.hubConnectinon.stop().catch(error => console.log(error));
+ }
+
+
+
+
+
+
+
+
+
+
+
+
 
 getUsers(page?, itemsPerPage?, userParams?, likesParams?): Observable<PaginationResult<User[]>> {
   const paginateResulet: PaginationResult<User[]> = new PaginationResult<User[]>();
@@ -99,10 +172,24 @@ getMessages(id: number, page?, itemsPerPage?, messageContainer?) {
 getMessagesThread(id: number, recipientId: number ) {
  return this.http.get<Messages[]>(this.baseUrl +  id + '/messages/tread/' + recipientId );
 }
-
-sendMessage(id: number , message: Messages) {
-  return this.http.post(this.baseUrl +  id + '/messages', message);
+/**
+ *
+ *
+ */
+async sendMessage(id: number , message: Messages) {
+  // return this.http.post(this.baseUrl +  id + '/messages', message); //
+  return this.hubConnectinon.invoke('SendMessage',  message, id)
+  .catch(error => console.log(error));
 }
+async sendMessage1(id: number , message: Messages) {
+  return this.hubConnectinon.invoke('SendMessage',  id, message)
+    .catch(error => console.log(error));
+}
+/**
+ *
+ *
+ *
+ */
 deleteMessage(id: number, userId: number) {
   return this.http.post(this.baseUrl +  userId + '/messages/' + id, {});
   // { } za post metodu gde se saljen neki objekat

@@ -1,16 +1,20 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace DatingAPP.API.Model
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        public int Id { get; set; }
+        // public int Id { get; set; }   
 
-        public string UserName { get; set; }
+        // public string UserName { get; set; }
 
-        public byte[] PasswordHash  { get;set; }
-        public byte[] PasswordSalt { get; set; }
+        // public byte[] PasswordHash  { get;set; }
+        // public byte[] PasswordSalt { get; set; }
+
+        // ova svojstva vec postoje u klasi IdentitiyUser pa ih nije potrebno ponovo postavljati
         public string Gender { get; set; }
         public string Introduction { get; set; }
         public string LookingFor { get; set; }
@@ -28,6 +32,8 @@ namespace DatingAPP.API.Model
 
         public ICollection<Message> MessagesSend { get; set; }
         public ICollection<Message> MessagesReceived { get; set; }
+
+        public ICollection<UserRole> UserRoles { get; set; }
 
     }
         

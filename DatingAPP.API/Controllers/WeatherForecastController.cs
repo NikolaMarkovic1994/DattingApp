@@ -10,6 +10,7 @@ using DatingApp.API.Data;
 using DatingAPP.API.Data;
 using DatingAPP.API.Dtos;
 using DatingAPP.API.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +26,12 @@ namespace DatingApp.API.Controllers
         private readonly IAutnRepository _repo;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
-        public WeatherForecastController(IAutnRepository repo, IConfiguration config, IMapper mapper)
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        public WeatherForecastController(IAutnRepository repo, IConfiguration config, IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager)
         {
+            _signInManager = signInManager;
+            _userManager = userManager;
             _mapper = mapper;
             _config = config;
             _repo = repo;
@@ -34,43 +39,65 @@ namespace DatingApp.API.Controllers
         [HttpPost("reg")]//HttpPost za postavnjanje podataka u bazi
         public async Task<IActionResult> Register([FromBody] UserForRefDtos userForRefDtos)
         {
-            userForRefDtos.UserName = userForRefDtos.UserName.ToLower();
+            
+            
+            var userToCreate = _mapper.Map<User>(userForRefDtos);
+            var result = await _userManager.CreateAsync(userToCreate, userForRefDtos.Pssword);
+           
+            var userToReturn = _mapper.Map<UserForDetaileDto>(userToCreate);
 
-            if (await _repo.UserExists(userForRefDtos.UserName))
+            if (result.Succeeded)
             {
-                return BadRequest("Username alreeady exists");
+                 return CreatedAtRoute("GetUser", 
+                     new {controller = "Users",id = userToCreate.Id}, userToReturn);
             }
-
-            // var userToCreate = new User
-            // {
-            //     UserName = userForRefDtos.UserName
-            // };
-            var userToCreate =_mapper.Map<User>(userForRefDtos);
-
-            var userCreated = await _repo.Register(userToCreate, userForRefDtos.Pssword);
-            var userToReturn =_mapper.Map<UserForDetaileDto>(userCreated);
-
-
-            return CreatedAtRoute("GetUser", new {controller = "Users",
-             id=userCreated.Id},userToReturn);
+           return BadRequest(result.Errors);
         }
         [HttpPost("log")]
         public async Task<IActionResult> LogIn([FromBody] UserForLogInDtos userForLogInDtos)
         {
 
-            var userFromDb = await _repo.LogIn(userForLogInDtos.Usernam.ToLower(), userForLogInDtos.Password);
-            // promenljivoj userFromDb popenjuje korisnika iz baze ako je sve uredu
+            var user = await _userManager.FindByNameAsync(userForLogInDtos.Usernam);
 
-            if (userFromDb == null)
+            var result = await _signInManager.CheckPasswordSignInAsync(user,userForLogInDtos.Password, false);
+            // proverava pasvord , a treci parametar sluzi za zakljucavanje nalova 
+            // moze se podesiti da ako se otkuca odredjeni broj posresnih lozinki da dodje donzakljucavanja profila
+          
+
+          if (result.Succeeded)
+          {
+              
+              var appUser = await _userManager.Users.Include(p =>p.Photos)
+              .FirstOrDefaultAsync(u => u.NormalizedUserName == userForLogInDtos.Usernam.ToUpper());
+               
+                var userToReturn = _mapper.Map<UserForListDto>(appUser);
+
+                  return Ok(new
             {
-                return Unauthorized();
-            }
-            var clames = new[]
+
+                token = GenerateJwtToken(appUser).Result,
+                user=userToReturn
+
+            });
+
+          }
+            return Unauthorized();
+
+          
+        }
+
+         private async Task<string> GenerateJwtToken (User user){
+          var clames = new List<Claim>
             {
-                 new Claim(ClaimTypes.NameIdentifier, userFromDb.Id.ToString()),
-                 new Claim(ClaimTypes.Name, userFromDb.UserName)
+                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                 new Claim(ClaimTypes.Name, user.UserName)
              };
 
+                var roles = await _userManager.GetRolesAsync(user);
+                foreach (var role in roles)
+                {
+                    clames.Add(new Claim(ClaimTypes.Role, role));
+                }
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
             // VAZNO MORA SE PAZITI "AppSettings:Token" BEZ RAZMAKA
             // 
@@ -87,18 +114,14 @@ namespace DatingApp.API.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            var user = _mapper.Map<UserForListDto>(userFromDb);
-
-            return Ok(new
-            {
-
-                token = tokenHandler.WriteToken(token),
-                user
-
-            });
+            return tokenHandler.WriteToken(token);
         }
 
+
+
     }
+
+   
 
     [ApiController]
     [Route("[controller]")]// http://localhost:500/WeatherForecast

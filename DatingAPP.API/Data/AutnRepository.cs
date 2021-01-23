@@ -23,8 +23,8 @@ namespace DatingAPP.API.Data
             var user =await _context.Users.Include(p =>p.Photos).FirstOrDefaultAsync(x => x.UserName == username);// ide u bazu i trazi korisnika sa istim korisnickim imenom
             if(username==null)
                  return null;
-            if(!VerPassHash(password, user.PasswordHash,user.PasswordSalt))
-                return null;
+            // if(!VerPassHash(password, user.PasswordHash,user.PasswordSalt))
+            //     return null;
            return user;     
         }
 
@@ -58,8 +58,8 @@ namespace DatingAPP.API.Data
              byte[] bytes1 = System.Text.Encoding.UTF8.GetBytes("passSalt");
              byte[] bytes3 = System.Text.Encoding.UTF8.GetBytes(password); 
              CreatePassHash(bytes3 , out passHash, out passSalt);
-            user.PasswordHash=passHash;
-             user.PasswordSalt=passSalt;
+            // user.PasswordHash=passHash;
+            //  user.PasswordSalt=passSalt;
 
              await _context.Users.AddAsync(user);
              await _context.SaveChangesAsync();// ubacivanje usra u bazu

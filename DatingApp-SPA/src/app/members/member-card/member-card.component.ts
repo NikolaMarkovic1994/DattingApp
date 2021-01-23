@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/_model/user';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { AuthService } from 'src/app/_services/auth.service';
+import { PresenceService } from 'src/app/_services/presence.service';
 import { UserService } from 'src/app/_services/user.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class MemberCardComponent implements OnInit {
 
   constructor(private authService: AuthService
     , private userService: UserService
-    , private alertify: AlertifyService) { }
+    , private alertify: AlertifyService
+    , public presence: PresenceService) { }
 
   ngOnInit() {
   }

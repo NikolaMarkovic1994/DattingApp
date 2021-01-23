@@ -11,6 +11,8 @@ namespace DatingAPP.API.Model
         public bool IsMain { get; set; }
         public string PublicId { get; set; }
 
+        public bool IsApproved { get; set; }
+
 
         // Postavnjamo opcije kako bi pri brisanju korisnika obisali i njegove fotografije
         public User User { get; set; }

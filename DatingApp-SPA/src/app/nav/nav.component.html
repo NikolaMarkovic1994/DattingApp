@@ -13,6 +13,15 @@
         <li class="nav-item"  routerLinkActive="active">
           <a class="nav-link " [routerLink]="['/messages']">Messages</a>
         </li>
+        <li *appHasRole="['Admin','Moderator']" class="nav-item"  routerLinkActive="active">
+          <a class="nav-link " [routerLink]="['/admin']">Admin</a>
+        </li>
+        <li class="nav-item"  routerLinkActive="active">
+          <a class="nav-link " [routerLink]="['/messages-test']">MessagesTest</a>
+        </li>
+        <li class="nav-item"  routerLinkActive="active">
+          <a class="nav-link " [routerLink]="['/messages-chat']">MessagesChat</a>
+        </li>
         
       </ul>
 

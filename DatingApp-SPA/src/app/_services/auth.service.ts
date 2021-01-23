@@ -5,7 +5,8 @@ import {map} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { User } from '../_model/user';
 import {BehaviorSubject} from 'rxjs';
-
+import { PresenceService } from './presence.service';
+import { UserTest } from '../_model/userTest';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,8 +17,8 @@ export class AuthService {
   curentUser: User;
   photoUrl = new BehaviorSubject<string>('../../assets/user.png');
   currentPhotoUrl = this.photoUrl.asObservable();
-
-constructor(private http: HttpClient) { }
+  userTest: UserTest;
+constructor(private http: HttpClient, private presencs: PresenceService) { }
 changeMemberPhoto(photo: string) {
 this.photoUrl.next(photo);
 }
@@ -30,8 +31,10 @@ loging(model: any) {
          localStorage.setItem('token', user.token);
          localStorage.setItem('user', JSON.stringify(user.user));
          this.curentUser = user.user;
-         this.decodeToken = this.jwtHelper.decodeToken(user.token);
+          this.decodeToken = this.jwtHelper.decodeToken(user.token);
          this.changeMemberPhoto(this.curentUser.photoUrl);
+          this.presencs.createHubConnection(user);
+       // this.presencs.createHubConnectionTest(this.curentUser,user.token);
        }
     })
   );
@@ -44,6 +47,24 @@ register(user: User) {
 loggedIn() {
   const token = localStorage.getItem('token');
   return !this.jwtHelper.isTokenExpired(token);
+}
+
+roelMatch(allowRoles): boolean {
+  let isMatch = false;
+
+  const userRoles = this.decodeToken.role as Array<string>;
+  allowRoles.forEach(element => {
+    if (userRoles.includes(element)) {
+      isMatch = true;
+      return;
+    }
+
+  });
+
+  return isMatch;
+}
+stopHub() {
+  this.presencs.stopHubConnection();
 }
 
 }

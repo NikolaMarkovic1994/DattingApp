@@ -43,11 +43,21 @@ namespace DatingAPP.API.Controllers
             var photoFromRepo = await _repo.GetPhoto(id);
             var photo = _mapper.Map<PhotoForReturnDto>(photoFromRepo);
             return Ok(photo);
+            /*
+            VAZNO
+                    [HttpGet("/{id}", Name = "GetPhoto")] gde /{id} se koristi pri pravljenju aplikacije 
+                    i njenog poyivanjea od angulara localhost: 4200
+
+                    Kada zelimo da stavimo na severr i aplikaciju poyivamo iy wwwroot foldera u APUI onda moramo ukloniti od /  /{id}
+
+            
+            
+            */
         }
         [HttpPost]
         public async Task<IActionResult> AddPhotoForUser(int userid,[FromForm] PhotoForCreationDto photoForCreationDto){
 
-            var userFromRepo = await _repo.GetUser(userid);
+            var userFromRepo = await _repo.GetUser(userid,true);
             var file = photoForCreationDto.File;
             var uploadResult = new ImageUploadResult();
             if (file.Length>0)
@@ -82,7 +92,7 @@ namespace DatingAPP.API.Controllers
         [HttpPost("{id}/ismain")]
         public async Task<IActionResult> SetMainPhoto(int userid,int id){
 
-            var user =await _repo.GetUser(userid);
+            var user =await _repo.GetUser(userid,true);
             if (!user.Photos.Any(p=>p.Id==id))
             {
                 return BadRequest("Slika nije pronadjena");
@@ -107,7 +117,7 @@ namespace DatingAPP.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePhoto(int id, int userid){
             
-            var user =await _repo.GetUser(userid);
+            var user =await _repo.GetUser(userid,true);
             if (!user.Photos.Any(p=>p.Id==id))
             {
                 return BadRequest("Slika nije pronadjena");

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AlertifyService } from '../_services/alertify.service';
 import { AuthService } from '../_services/auth.service';
+import { PresenceService } from '../_services/presence.service';
 
 @Component({
   selector: 'app-nav',
@@ -12,7 +13,8 @@ import { AuthService } from '../_services/auth.service';
 export class NavComponent implements OnInit {
   model: any = {}; // promenjiva model tipa any koja ce u sebi imati Username and Pass
   photoUrl: string;
-  constructor(public authService: AuthService, private alertify: AlertifyService, private router: Router) { }
+  constructor(public authService: AuthService, private presencs: PresenceService,
+     private alertify: AlertifyService, private router: Router) { }
 
   ngOnInit() {
     this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
@@ -41,5 +43,6 @@ export class NavComponent implements OnInit {
     this.authService.curentUser = null;
     this.alertify.message('LOGGED OUT');
     this.router.navigate(['/home']);
-}
+    this.authService.stopHub();
+  }
 }

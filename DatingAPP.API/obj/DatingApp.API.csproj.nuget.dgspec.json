@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\38164\\Desktop\\Test\\DatingApp\\DatingApp.API\\DatingApp.API.csproj": {}
+    "C:\\Users\\38164\\Desktop\\Test\\datingapp\\datingapp.api\\DatingApp.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\38164\\Desktop\\Test\\DatingApp\\DatingApp.API\\DatingApp.API.csproj": {
+    "C:\\Users\\38164\\Desktop\\Test\\datingapp\\datingapp.api\\DatingApp.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\38164\\Desktop\\Test\\DatingApp\\DatingApp.API\\DatingApp.API.csproj",
+        "projectUniqueName": "C:\\Users\\38164\\Desktop\\Test\\datingapp\\datingapp.api\\DatingApp.API.csproj",
         "projectName": "DatingApp.API",
-        "projectPath": "C:\\Users\\38164\\Desktop\\Test\\DatingApp\\DatingApp.API\\DatingApp.API.csproj",
+        "projectPath": "C:\\Users\\38164\\Desktop\\Test\\datingapp\\datingapp.api\\DatingApp.API.csproj",
         "packagesPath": "C:\\Users\\38164\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\38164\\Desktop\\Test\\DatingApp\\DatingApp.API\\obj\\",
+        "outputPath": "C:\\Users\\38164\\Desktop\\Test\\datingapp\\datingapp.api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -66,13 +66,17 @@
                 "NU1605"
               ]
             },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[5.0.1, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[5.0.1, )"
+              "version": "[5.0.2, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -82,7 +86,7 @@
             },
             "Microsoft.EntityFrameworkCore.Relational": {
               "target": "Package",
-              "version": "[5.0.1, )"
+              "version": "[5.0.2, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -101,6 +105,10 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[12.0.3, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[5.0.0-alpha.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

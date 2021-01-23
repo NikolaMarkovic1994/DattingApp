@@ -1,0 +1,3 @@
+<input type="text" name="message" [(ngModel)]="message">
+<button (click)="echo()">Send</button>
+<p *ngFor="let m of messages">{{m}}</p>
